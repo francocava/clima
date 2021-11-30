@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Header from "./components/Header";
 import Forumulario from "./components/Formulario";
-import Clima from "./Clima";
+import Clima from "./components/Clima";
 
 function App() {
 
