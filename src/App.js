@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import Header from "./components/Header";
 import Forumulario from "./components/Formulario";
 import Clima from "./components/Clima";
+import Error from "./components/Error";
 
 function App() {
 
@@ -13,6 +14,8 @@ function App() {
   const [consultar, guardarConsultar] = useState(false);
   //guarda un objeto (lo que devuelve la api)
   const [resultado, guardarResultado] = useState({});
+  //por si da error la api
+  const [error,guardarError] = useState(false);
   const {ciudad, pais} = busqueda;
 
   useEffect(() => {
@@ -28,10 +31,26 @@ function App() {
 
         guardarResultado(resultado);
         guardarConsultar(false);
+
+        //por si fallo la api
+        if(resultado.cod === "404"){
+          guardarError(true);
+        }
+        else {
+          guardarError(false);
+        }
       }
     }
     consultarAPI();
   }, [consultar]);
+
+  let componente;
+  if(error) {
+    componente = <Error mensaje="No hay resultados" />
+  } else {
+    componente = <Clima resultado={resultado}/> 
+  }
+
 
   return (
     <Fragment>
@@ -47,8 +66,7 @@ function App() {
               guardarConsultar={guardarConsultar}/>
             </div>
             <div className="col m6 s12">
-              <Clima
-              resultado={resultado}/>
+              {componente}
             </div>
           </div>
         </div>
